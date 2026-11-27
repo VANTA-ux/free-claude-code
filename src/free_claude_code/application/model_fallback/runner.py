@@ -94,8 +94,13 @@ async def stream_model_candidates(
                     preserved_error=preserved_error,
                 )
 
-        if candidate_failure is None:
-            return
+    if candidate_failure is None:
+    logger.info(
+        "VANTA_MODEL_SUCCESS provider={} model={}",
+        target.provider_id,
+        target.provider_model,
+    )
+    return
         step = next_step(
             CandidateFailure(
                 context=candidate_failure.stream_context,
