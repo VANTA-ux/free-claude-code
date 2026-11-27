@@ -42,13 +42,7 @@ async def stream_model_candidates(
             delivery.begin_attempt()
         target = candidate.target
         record_request_route(target.provider_id, target.provider_model)
-        logger.info(
-    "VANTA_MODEL_ATTEMPT provider={} model={} candidate={}/{}",
-    target.provider_id,
-    target.provider_model,
-    index + 1,
-    len(candidates),
-)
+        
         provider_stream: AsyncIterator[StreamOutput] | None = None
         candidate_committed = False
         candidate_failure: ExecutionFailure | None = None
@@ -93,13 +87,7 @@ async def stream_model_candidates(
                     source="application",
                     preserved_error=preserved_error,
                 )
-
-            if candidate_failure is None:
-            logger.info(
-                "VANTA_MODEL_SUCCESS provider={} model={}",
-                target.provider_id,
-                target.provider_model,
-            )
+        if candidate_failure is None:
             return
         step = next_step(
             CandidateFailure(
