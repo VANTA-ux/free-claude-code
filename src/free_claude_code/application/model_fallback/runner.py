@@ -2,6 +2,7 @@
 
 import asyncio
 import sys
+from loguru import logger
 from collections.abc import AsyncGenerator, AsyncIterator, Callable
 
 from free_claude_code.core.failures import ExecutionFailure
@@ -41,6 +42,13 @@ async def stream_model_candidates(
             delivery.begin_attempt()
         target = candidate.target
         record_request_route(target.provider_id, target.provider_model)
+        logger.info(
+    "VANTA_MODEL_ATTEMPT provider={} model={} candidate={}/{}",
+    target.provider_id,
+    target.provider_model,
+    index + 1,
+    len(candidates),
+)
         provider_stream: AsyncIterator[StreamOutput] | None = None
         candidate_committed = False
         candidate_failure: ExecutionFailure | None = None
